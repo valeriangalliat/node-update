@@ -19,7 +19,7 @@ while test $# -gt 0; do
 done
 
 echo "Retrieving last version number from Node.js home page."
-match=$(curl -# "$NODE_HOME" | grep -Eo "$VERSION_MATCHER")
+match=$(curl -# -f "$NODE_HOME" | grep -Eo "$VERSION_MATCHER")
 
 if [ $? != 0 ]; then
     echo "Unable to extract current version from Node.js home page." >&2
@@ -50,7 +50,7 @@ tmp_archive="$tmp_dir/$archive"
 tmp_extract_dir="$tmp_dir/$extract_dir"
 
 echo "Downloading '$archive'."
-curl -# -o "$tmp_archive" "$url"
+curl -# -fo "$tmp_archive" "$url"
 
 if [ $? != 0 ]; then
     echo "Unable to download Node.js archive." >&2
