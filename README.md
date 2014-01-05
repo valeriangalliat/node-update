@@ -16,6 +16,9 @@ files (like modules and stuff) are kept.
 Example
 -------
 
+The examples are assuming the `node-update` command is globally accessible
+but feel free to use the relative path to the file if needed.
+
 If you want a local installation for your user.
 
 ```sh
