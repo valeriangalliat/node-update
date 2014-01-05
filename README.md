@@ -19,15 +19,10 @@ Example
 If you want a local installation for your user.
 
 ```sh
-mkdir node && cd node
+mkdir node
 
 # Install 64-bit version in current directory
-node-update
-
-cd ..
-
-# Install 32-bit version in custom directory
-node-update -a 32 -t node
+node-update -a 64 -t node
 
 # Add Node.js binaries to environment
 echo "PATH=$(pwd)/node/bin:$PATH" >> ~/.bash_profile
