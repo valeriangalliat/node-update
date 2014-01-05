@@ -27,7 +27,7 @@ mkdir node
 # Install 64-bit version in newly created directory
 node-update -a 64 -t node
 
-# Add Node.js binaries to environment
+# Add Node.js binaries to environment (if using Bash)
 echo "PATH=$(pwd)/node/bin:\$PATH" >> ~/.bash_profile
 ```
 
