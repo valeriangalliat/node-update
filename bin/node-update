@@ -1,0 +1,91 @@
+#!/bin/sh
+
+set -e
+
+NODE_HOME="http://nodejs.org/"
+NODE_ARCHIVE_DIR="http://nodejs.org/dist/v%s"
+NODE_ARCHIVE="node-v%s-linux-x%s.tar.gz"
+NODE_EXTRACT_DIR="node-v%s-linux-x%s"
+VERSION_MATCHER="<p>Current Version: v[0-9]+\.[0-9]+\.[0-9]+</p>"
+VERSION_EXTRACTOR="s/.*v([0-9]+\.[0-9]+\.[0-9]+).*/\1/g"
+
+ARCH="64"
+TARGET_DIR="."
+
+while test $# -gt 0; do
+    case "$1" in
+        -a|--arch) ARCH=$2; shift 2;;
+        -t|--target-dir) TARGET_DIR=$2; shift 2;;
+        *) echo "Invalid option '$1'." >&2; exit 1;;
+    esac
+done
+
+echo "Retrieving last version number from Node.js home page."
+match=$(curl -# "$NODE_HOME" | grep -Eo "$VERSION_MATCHER")
+
+if [ $? != 0 ]; then
+    echo "Unable to extract current version from Node.js home page." >&2
+    exit 1
+fi
+
+echo
+
+version=$(echo "$match" | sed -r "$VERSION_EXTRACTOR")
+echo "Current Node.js version is $version."
+echo
+
+if [ -f "$TARGET_DIR/VERSION" ]; then
+    if [ "$(cat "$TARGET_DIR/VERSION")" = "$version" ]; then
+        echo "Node.js is already up to date!"
+        exit
+    fi
+fi
+
+archive_dir=$(printf "$NODE_ARCHIVE_DIR" "$version")
+archive=$(printf "$NODE_ARCHIVE" "$version" "$ARCH")
+extract_dir="$(printf "$NODE_EXTRACT_DIR" "$version" "$ARCH")"
+
+url="$archive_dir/$archive"
+
+tmp_dir=$(mktemp -d)
+tmp_archive="$tmp_dir/$archive"
+tmp_extract_dir="$tmp_dir/$extract_dir"
+
+echo "Downloading '$archive'."
+curl -# -o "$tmp_archive" "$url"
+
+if [ $? != 0 ]; then
+    echo "Unable to download Node.js archive." >&2
+    [ -f "$tmp_archive" ] && rm "$tmp_archive"
+    exit 2
+fi
+
+echo
+
+echo "Extracting archive..."
+tar xf "$tmp_archive" -C "$tmp_dir"
+echo "Done."
+echo
+
+if [ ! -d "$tmp_extract_dir" ]; then
+    echo "Unable to find the extract directory, expected '$extract_dir'." >&2
+    rm "$tmp_archive"
+    exit 3
+fi
+
+echo "Saving current version in file."
+echo "$version" > "$tmp_extract_dir/VERSION"
+echo "Done."
+echo
+
+echo "Deploying new installation..."
+cp -rT "$tmp_extract_dir" "$TARGET_DIR"
+echo "Done."
+echo
+
+echo "Removing temporary directory."
+rm -r "$tmp_dir"
+echo "Done."
+echo
+
+echo "Node.js is up to date!"
