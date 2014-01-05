@@ -26,7 +26,7 @@ mkdir node
 cd node
 
 # Install 32-bit version in current directory
-node-update -a 32
+node-update -a x86
 
 # Add Node.js binaries to environment (if using Bash)
 echo "PATH=$(pwd)/node/bin:\$PATH" >> ~/.bash_profile

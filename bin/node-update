@@ -4,12 +4,12 @@ set -e
 
 NODE_HOME="http://nodejs.org/"
 NODE_ARCHIVE_DIR="http://nodejs.org/dist/v%s"
-NODE_ARCHIVE="node-v%s-linux-x%s.tar.gz"
-NODE_EXTRACT_DIR="node-v%s-linux-x%s"
+NODE_ARCHIVE="node-v%s-linux-%s.tar.gz"
+NODE_EXTRACT_DIR="node-v%s-linux-%s"
 VERSION_MATCHER="<p>Current Version: v[0-9]+\.[0-9]+\.[0-9]+</p>"
 VERSION_EXTRACTOR="s/.*v([0-9]+\.[0-9]+\.[0-9]+).*/\1/g"
 
-ARCH="64"
+ARCH="x64"
 TARGET_DIR="."
 
 while test $# -gt 0; do
