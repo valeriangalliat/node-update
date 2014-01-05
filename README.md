@@ -24,7 +24,7 @@ If you want a local installation for your user.
 ```sh
 mkdir node
 
-# Install 64-bit version in current directory
+# Install 64-bit version in newly created directory
 node-update -a 64 -t node
 
 # Add Node.js binaries to environment
