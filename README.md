@@ -23,9 +23,10 @@ If you want a local installation for your user.
 
 ```sh
 mkdir node
+cd node
 
-# Install 64-bit version in newly created directory
-node-update -a 64 -t node
+# Install 32-bit version in current directory
+node-update -a 32
 
 # Add Node.js binaries to environment (if using Bash)
 echo "PATH=$(pwd)/node/bin:\$PATH" >> ~/.bash_profile
@@ -36,6 +37,8 @@ To install globally (I don't like this way).
 ```sh
 su -
 mkdir /opt/node
+
+# Instal 64-bit version (default) to specified directory
 node-update -t /opt/node
 
 # Globally add to environment
