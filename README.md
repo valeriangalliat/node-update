@@ -13,8 +13,8 @@ same parameters, will try to update if a new version came out.
 When updating, all files from the new archive will be copied but the added
 files (like modules and stuff) are kept.
 
-Example
--------
+Examples
+--------
 
 The examples are assuming the `node-update` command is globally accessible
 but feel free to use the relative path to the file if needed.
