@@ -1,7 +1,10 @@
-Node Update
+node-update
 ===========
 
-Update a portable Node.js installation.
+> Update a portable Node.js installation.
+
+**Warning:** this script is outdated and not working with the current
+Node.js website.
 
 Description
 -----------
@@ -16,10 +19,7 @@ files (like modules and stuff) are kept.
 Examples
 --------
 
-The examples are assuming the `node-update` command is globally accessible
-but feel free to use the relative path to the file if needed.
-
-If you want a local installation for your user.
+If you want a local installation for your user:
 
 ```sh
 mkdir node
@@ -32,7 +32,7 @@ node-update -a x86
 echo "PATH=$(pwd)/node/bin:\$PATH" >> ~/.bash_profile
 ```
 
-To install globally (I don't like this way).
+To install globally:
 
 ```sh
 su -

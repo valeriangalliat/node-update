@@ -1,28 +1,28 @@
-set -e
+#!/bin/sh -e
 
-NODE_HOME="http://nodejs.org/"
-NODE_ARCHIVE_DIR="http://nodejs.org/dist/v%s"
-NODE_ARCHIVE="node-v%s-linux-%s.tar.gz"
-NODE_EXTRACT_DIR="node-v%s-linux-%s"
-VERSION_MATCHER="<p>Current Version: v[0-9]+\.[0-9]+\.[0-9]+</p>"
-VERSION_EXTRACTOR="s/.*v([0-9]+\.[0-9]+\.[0-9]+).*/\1/g"
+NODE_HOME='http://nodejs.org/'
+NODE_ARCHIVE_DIR='http://nodejs.org/dist/v%s'
+NODE_ARCHIVE='node-v%s-linux-%s.tar.gz'
+NODE_EXTRACT_DIR='node-v%s-linux-%s'
+VERSION_MATCHER='<p>Current Version: v[0-9]+\.[0-9]+\.[0-9]+</p>'
+VERSION_EXTRACTOR='s/.*v([0-9]+\.[0-9]+\.[0-9]+).*/\1/g'
 
-ARCH="x64"
-TARGET_DIR="."
+ARCH='x64'
+TARGET_DIR='.'
 
 while test $# -gt 0; do
     case "$1" in
         -a|--arch) ARCH=$2; shift 2;;
         -t|--target-dir) TARGET_DIR=$2; shift 2;;
-        *) echo "Invalid option '$1'." >&2; exit 1;;
+        *) echo "Invalid option \`$1\`." >&2; exit 1;;
     esac
 done
 
-echo "Retrieving last version number from Node.js home page."
+echo 'Retrieving last version number from Node.js home page.'
 match=$(curl -# -f "$NODE_HOME" | grep -Eo "$VERSION_MATCHER")
 
 if [ $? != 0 ]; then
-    echo "Unable to extract current version from Node.js home page." >&2
+    echo 'Unable to extract current version from Node.js home page.' >&2
     exit 1
 fi
 
@@ -34,7 +34,7 @@ echo
 
 if [ -f "$TARGET_DIR/VERSION" ]; then
     if [ "$(cat "$TARGET_DIR/VERSION")" = "$version" ]; then
-        echo "Node.js is already up to date!"
+        echo 'Node.js is already up to date!'
         exit
     fi
 fi
@@ -53,37 +53,37 @@ echo "Downloading '$archive'."
 curl -# -fo "$tmp_archive" "$url"
 
 if [ $? != 0 ]; then
-    echo "Unable to download Node.js archive." >&2
+    echo 'Unable to download Node.js archive.' >&2
     [ -f "$tmp_archive" ] && rm "$tmp_archive"
     exit 2
 fi
 
 echo
 
-echo "Extracting archive..."
+echo 'Extracting archive...'
 tar xf "$tmp_archive" -C "$tmp_dir"
-echo "Done."
+echo 'Done.'
 echo
 
 if [ ! -d "$tmp_extract_dir" ]; then
-    echo "Unable to find the extract directory, expected '$extract_dir'." >&2
+    echo "Unable to find the extract directory, expected \`$extract_dir\`." >&2
     rm "$tmp_archive"
     exit 3
 fi
 
-echo "Saving current version in file."
+echo 'Saving current version in file.'
 echo "$version" > "$tmp_extract_dir/VERSION"
-echo "Done."
+echo 'Done.'
 echo
 
-echo "Deploying new installation..."
+echo 'Deploying new installation...'
 cp -rT "$tmp_extract_dir" "$TARGET_DIR"
 echo "Done."
 echo
 
-echo "Removing temporary directory."
+echo 'Removing temporary directory.'
 rm -r "$tmp_dir"
-echo "Done."
+echo 'Done.'
 echo
 
-echo "Node.js is up to date!"
+echo 'Node.js is up to date!'

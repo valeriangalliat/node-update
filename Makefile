@@ -1,27 +1,22 @@
-a2x = a2x
-asciidoc = asciidoc
+RONN = ronn
+RONNFLAGS = --pipe --warnings
 
-all: bin bin/node-update doc/node-update.8 doc/node-update.8.html
+ALLMAN += man/node-update.8
+ALLMAN += man/node-update.8.html
+ALLMAN += man/node-update.8.md
+
+all: man
 
 clean:
-	rm -fr \
-		bin \
-		doc/node-update.8 \
-		doc/node-update.8.html
+	$(RM) $(ALLMAN)
 
-.PHONY: all clean
+man: $(ALLMAN)
 
-bin:
-	mkdir $@
+man/%: man/%.ronn
+	$(RONN) $(RONNFLAGS) --roff $< > $@
 
-bin/node-update: src/node-update.sh
-	echo "#!$$(which sh)" > $@
-	echo >> $@
-	cat $< >> $@
-	chmod +x $@
+man/%.html: man/%.ronn
+	$(RONN) $(RONNFLAGS) --html --style toc $< > $@
 
-doc/node-update.8: doc/node-update.8.txt
-	$(a2x) -f manpage --no-xmllint $<
-
-doc/node-update.8.html: doc/node-update.8.txt
-	$(asciidoc) $<
+man/%.md: man/%.ronn
+	$(RONN) $(RONNFLAGS) --markdown $< > $@

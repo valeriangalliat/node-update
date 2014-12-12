@@ -1,0 +1,25 @@
+node-update(8) -- update a portable Node.js installation
+========================================================
+
+## SYNOPSIS
+
+`node-update`
+
+## DESCRIPTION
+
+This command downloads the latest Node.js version for the specified
+architecture in the specified directory, without overriding the whole
+installation.
+
+## OPTIONS
+
+* `-a`, `--arch`=<arch>:
+  The architecture to use (`x64` by default).
+
+* `-t`, `--target-dir`=<target>:
+  The target directory for the Node.js installation (default is current
+  directory).
+
+## SEE ALSO
+
+<http://www.nodejs.org/>, **curl**(1), **tar**(1)
